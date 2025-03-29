@@ -1,16 +1,20 @@
-name: CI Pipeline
+name: Deploy to GitHub Pages
 
-on: [push, pull_request]  # Triggers on pushes and PRs
+on:
+  push:
+    branches: [ "main" ]  # Runs on pushes to main branch
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-              
-          
-      - name: Verify HTML form exists
-        run: |
-          ls | grep register.html
-          echo "Form validation complete"
+        
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./  # Deploys everything in root
+          keep_files: true  # Preserves existing files
